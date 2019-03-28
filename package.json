@@ -1,0 +1,15 @@
+{
+  "name": "apcupsd-mqtt",
+  "version": "1.0.0",
+  "description": "APC UPS ",
+  "author": "Ariel De Santo <adesanto@vdscorp.com.ar>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "apcaccess": "^1.1.2",
+    "mqtt": "^2.18.8",
+    "dotenv": "^7.0.0"
+  }
+}
