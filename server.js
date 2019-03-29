@@ -13,7 +13,7 @@ const mqttTopic = process.env.MQTT_TOPIC || 'apc_office/TELE/STATE';
                 })
             .then(function(result) {
                 console.log(result)
-                const client_mqtt = mqtt.connect(mqttServer)
+                const client_mqtt = mqtt.connect('mqtt://' + mqttServer);
                 client_mqtt.on('connect', function () {
                     client_mqtt.publish(mqttTopic, JSON.stringify(result));
                 })
@@ -24,6 +24,7 @@ const mqttTopic = process.env.MQTT_TOPIC || 'apc_office/TELE/STATE';
             })
             .catch(function(err) {
                 console.log(err);
+                client.disconnect();
                 console.log("Finish");
             })
     }, 10000);
