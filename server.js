@@ -13,7 +13,7 @@ const mqttTopic = process.env.MQTT_TOPIC || 'apc_office/TELE/STATE';
                       return client.getStatusJson()
                 })
             .then(function(obj) {
-                console.log(obj);
+                //console.log(JSON.stringify(obj));
                 const power = Math.round((parseFloat(obj.NOMPOWER.split(' ')[0])* parseFloat(obj.LOADPCT.split(' ')[0])) / 100.0)
                 obj['POWER'] = power.toString();
                 const client_mqtt = mqtt.connect('mqtt://' + mqttServer);
@@ -23,12 +23,12 @@ const mqttTopic = process.env.MQTT_TOPIC || 'apc_office/TELE/STATE';
                 return client.disconnect();
             })
             .then(function() {
-                console.log('Disconnected');
+                //console.log('Disconnected from apcupsd');
             })
             .catch(function(err) {
                 console.log(err);
                 client.disconnect();
-                console.log("Finish");
+                //console.log("Finish");
             })
     }, 10000);
 
@@ -55,8 +55,16 @@ function remUnits(obj) {
         return value.split('/').join(' ')
     }
 
+    const d = (value) => {
+        const date = value.split(' ')[0] + 'T' + value.split(' ')[1];
+
+        return date;
+    }
+
     const t = (value) => {
-        return s(value.split('.')[0])
+        const integer = value && parseInt(value.split(' ')[0])
+
+        if(!isNaN(integer)) return integer;
     }
 
     const z = {
@@ -69,7 +77,18 @@ function remUnits(obj) {
         NOMPOWER: r,
         STATFLAG: i,
         SERIALNO: s,
-        UPSNAME: s
+        UPSNAME: s,
+        MAXTIME: t,
+        MINTIMEL: t,
+        ALARMDEL: t,
+        CUMONBATT: t,
+        TIMELEFT: t,
+        TONBATT: t,
+        DATE: d,
+        STARTTIME: d,
+        XOFFBATT: d,
+        XONBATT: d
+
     }
     const status = {}
     for (let key in z) {
